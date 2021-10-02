@@ -1,0 +1,13 @@
+name: BungeeHomes
+version: '${project.version}'
+main: fr.iban.bungeehomes.BungeeHomesPlugin
+api-version: 1.17
+depend: [ Core ]
+authors: [ Iban ]
+description: Bungeecord home plugin
+
+commands:
+  home:
+  delhome:
+  homes:
+  sethome:
