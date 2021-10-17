@@ -22,10 +22,10 @@ public class SqlTables {
 	
 	public static void createTables() {
 		createTable("CREATE TABLE IF NOT EXISTS homes(" +
-				"    uuid INT AUTO_INCREMENT," +
+				"    uuid VARCHAR(36) NOT NULL," +
 				"    name VARCHAR(32) NOT NULL," +
-				"    server VARCHAR(255) NOT NULL," +
-				"    world VARCHAR(255) NOT NULL," +
+				"    server VARCHAR(50) NOT NULL," +
+				"    world VARCHAR(50) NOT NULL," +
 				"    x DOUBLE NOT NULL," +
 				"    y DOUBLE NOT NULL," +
 				"    z DOUBLE NOT NULL," +

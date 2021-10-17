@@ -7,7 +7,18 @@ authors: [ Iban ]
 description: Bungeecord home plugin
 
 commands:
-  home:
-  delhome:
-  homes:
-  sethome:
+  bhome:
+    permission: bungeehomes.home
+    aliases:
+      - home
+  bdelhome:
+    permission: bungeehomes.delhome
+    aliases:
+      - delhome
+  bhomes:
+    aliases:
+      - homes
+  bsethome:
+    permission: bungeehomes.sethome
+    aliases:
+      - sethome

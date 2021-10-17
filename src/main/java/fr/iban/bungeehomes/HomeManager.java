@@ -51,13 +51,20 @@ public class HomeManager {
             delHome(uuid, name);
         }
         Home home = new Home(name, SLocationUtils.getSLocation(loc));
+        getHomes().get(uuid).add(home);
         future(() -> {
             storage.addHome(uuid, home);
         });
     }
 
     public void delHome(UUID uuid, String name){
-
+        Home home = getHome(uuid, name);
+        if(home != null) {
+            getHomes().get(uuid).remove(home);
+            future(() -> {
+                storage.deleleHome(uuid, name);
+            });
+        }
     }
 
     private <T> CompletableFuture<T> future(Callable<T> supplier) {

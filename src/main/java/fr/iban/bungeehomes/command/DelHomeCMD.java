@@ -1,6 +1,6 @@
 package fr.iban.bungeehomes.command;
 
-import fr.iban.bukkitcore.CoreBukkitPlugin;
+import fr.iban.bukkitcore.menu.ConfirmMenu;
 import fr.iban.bungeehomes.BungeeHomesPlugin;
 import fr.iban.bungeehomes.Home;
 import fr.iban.bungeehomes.HomeManager;
@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class HomeCMD implements CommandExecutor, TabCompleter {
+public class DelHomeCMD implements CommandExecutor, TabCompleter {
 
     private BungeeHomesPlugin plugin;
     private HomeManager manager;
 
-    public HomeCMD(BungeeHomesPlugin plugin) {
+    public DelHomeCMD(BungeeHomesPlugin plugin) {
         this.plugin = plugin;
         this.manager = plugin.getHomeManager();
     }
@@ -38,23 +38,32 @@ public class HomeCMD implements CommandExecutor, TabCompleter {
 
                 String arg = args[0];
 
-                if(player.hasPermission("bungeehomes.home.others") && arg.contains(":")){
+                if(player.hasPermission("bungeehomes.delhome.others") && arg.contains(":")){
                     String[] split = arg.split(":");
                     uuid = Bukkit.getOfflinePlayer(split[0]).getUniqueId();
                     homeName = split[1];
                 }else{
                     homeName = arg;
                 }
-            }
 
+            }
             Home home = manager.getHome(uuid, homeName);
 
             if(home != null){
-                CoreBukkitPlugin.getInstance().getTeleportManager().teleport(player, home.getSLocation(), 3);
+                UUID finalUuid = uuid;
+                String finalHomeName = homeName;
+                new ConfirmMenu(player, "§c§lSupprimer une résidence?", "§cVoulez-vous vraiment supprimer " + homeName + " ?", confirmed -> {
+                    if(confirmed){
+                        player.sendMessage("§aLa résidence " + finalHomeName + " a bien été supprimée.");
+                        manager.delHome(finalUuid, finalHomeName);
+                    }else{
+                        player.sendMessage("§cAction annulée.");
+                    }
+                    player.closeInventory();
+                }).open();
             }else{
                 player.sendMessage("§cCette résidence n'existe pas.");
             }
-
 
         }
         return false;
@@ -93,4 +102,5 @@ public class HomeCMD implements CommandExecutor, TabCompleter {
         }
         return suggestions;
     }
+
 }
