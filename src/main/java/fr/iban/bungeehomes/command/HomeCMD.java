@@ -72,13 +72,15 @@ public class HomeCMD implements CommandExecutor, TabCompleter {
 
                 if(arg.contains(":")){
                     String[] split = arg.split(":");
-                    uuid = Bukkit.getOfflinePlayer(split[0]).getUniqueId();
-                    if(split.length == 2) {
-                        arg = split[1];
-                    }else{
-                        arg = "";
+                    if(split.length >= 1){
+                        uuid = Bukkit.getOfflinePlayer(split[0]).getUniqueId();
+                        if(split.length == 2) {
+                            arg = split[1];
+                        }else{
+                            arg = "";
+                        }
+                        prefix = split[0]+":";
                     }
-                    prefix = split[0]+":";
                 }
 
                 List<String> homeNames = manager.getHomeNames(uuid);

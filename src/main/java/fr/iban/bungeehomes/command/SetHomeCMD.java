@@ -41,7 +41,6 @@ public class SetHomeCMD implements CommandExecutor {
                 }else{
                     homeName = arg;
                 }
-
             }
 
             if(player.hasPermission("bungeehomes.amount.unlimited") ||  getMaxHomes(player, 1) > manager.getHomes().get(uuid).size()){
@@ -86,7 +85,6 @@ public class SetHomeCMD implements CommandExecutor {
                 }
             }
         }
-
         return maxHomes;
     }
 

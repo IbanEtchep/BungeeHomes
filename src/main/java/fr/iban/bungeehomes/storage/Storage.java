@@ -52,7 +52,7 @@ public class Storage {
 		return homes;
 	}
 	public void addHome(UUID uuid, Home home){
-		String sql = "INSERT INTO homes (uuid, name, server, world, x, y, z, pitch, yaw) VALUES(?, ?, ?, ?, ?, ? , ?, ?, ?);";
+		String sql = "INSERT INTO homes (uuid, name, server, world, x, y, z, pitch, yaw) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		try(Connection connection = ds.getConnection()){
 			try(PreparedStatement ps = connection.prepareStatement(sql)){
 				ps.setString(1, uuid.toString());

@@ -13,6 +13,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class HomeManager {
@@ -47,24 +48,30 @@ public class HomeManager {
     }
 
     public void setHome(UUID uuid, Location loc, String name) {
-        if(getHome(uuid, name) != null){
-            delHome(uuid, name);
-        }
-        Home home = new Home(name, SLocationUtils.getSLocation(loc));
-        getHomes().get(uuid).add(home);
         future(() -> {
+            if(getHome(uuid, name) != null){
+                try {
+                    delHome(uuid, name).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            Home home = new Home(name, SLocationUtils.getSLocation(loc));
+            getHomes().get(uuid).add(home);
             storage.addHome(uuid, home);
         });
     }
 
-    public void delHome(UUID uuid, String name){
-        Home home = getHome(uuid, name);
-        if(home != null) {
-            getHomes().get(uuid).remove(home);
-            future(() -> {
+    public CompletableFuture<Void> delHome(UUID uuid, String name){
+        return future(() -> {
+            Home home = getHome(uuid, name);
+            if(home != null) {
+                getHomes().get(uuid).remove(home);
                 storage.deleleHome(uuid, name);
-            });
-        }
+            }
+        });
     }
 
     private <T> CompletableFuture<T> future(Callable<T> supplier) {
