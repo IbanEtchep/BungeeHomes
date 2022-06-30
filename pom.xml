@@ -40,6 +40,16 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.github.ben-manes.caffeine</pattern>
+                                    <shadedPattern>fr.iban.bungeehomes.libs.com.github.ben-manes.caffeine</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.github.benmanes.caffeine</pattern>
+                                    <shadedPattern>fr.iban.bungeehomes.libs.com.github.benmanes.caffeine</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
@@ -74,8 +84,8 @@
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>2.9.0</version>
-            <scope>provided</scope>
+            <version>3.1.1</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>fr.iban</groupId>

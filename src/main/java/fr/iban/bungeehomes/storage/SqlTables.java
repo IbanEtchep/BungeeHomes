@@ -7,19 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class SqlTables {
-	
-	/*
-	 * Schema relationnel :
-	 * 
-	 * sc_warps (_idW_, name, description, datecreated, server, world x, y, z, pitch, yaw)
-	 * 
-	 * sc_warps_players(_uuid_, #idW)
-	 * 
-	 * sc_warps_rates(_#idW_, _uuid_, vote, date)
-	 * 
-	 * sc_warps_tags(_#idW_, _tag_)
-	 */
-	
+
 	public static void createTables() {
 		createTable("CREATE TABLE IF NOT EXISTS homes(" +
 				"    uuid VARCHAR(36) NOT NULL," +
