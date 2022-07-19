@@ -6,6 +6,8 @@ import fr.iban.bukkitcore.utils.SLocationUtils;
 import fr.iban.bungeehomes.storage.Storage;
 import fr.iban.common.data.sql.DbAccess;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -74,17 +76,20 @@ public class HomeManager {
         });
     }
 
-    private <T> CompletableFuture<T> future(Callable<T> supplier) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return supplier.call();
-            } catch (Exception e) {
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
+    public int getMaxHomes(Player player, int defaultValue) {
+        String permissionPrefix = "bungeehomes.amount.";
+        int maxHomes = defaultValue;
+
+        for (PermissionAttachmentInfo attachmentInfo : player.getEffectivePermissions()) {
+            String permission = attachmentInfo.getPermission();
+            if (permission.startsWith(permissionPrefix)) {
+                int permMaxhomes = Integer.parseInt(permission.substring(permission.lastIndexOf(".") + 1));
+                if(permMaxhomes > maxHomes){
+                    maxHomes = permMaxhomes;
                 }
-                throw new CompletionException(e);
             }
-        });
+        }
+        return maxHomes;
     }
 
     private CompletableFuture<Void> future(Runnable runnable) {

@@ -2,7 +2,6 @@ package fr.iban.bungeehomes;
 
 import fr.iban.bungeehomes.command.*;
 import fr.iban.bungeehomes.listener.JoinQuitListener;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BungeeHomesPlugin extends JavaPlugin {

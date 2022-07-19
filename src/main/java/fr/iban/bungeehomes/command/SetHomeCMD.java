@@ -43,7 +43,7 @@ public class SetHomeCMD implements CommandExecutor {
                 }
             }
 
-            if(player.hasPermission("bungeehomes.amount.unlimited") ||  getMaxHomes(player, 1) > manager.getHomes().get(uuid).size()){
+            if(player.hasPermission("bungeehomes.amount.unlimited") ||  manager.getMaxHomes(player, 1) > manager.getHomes().get(uuid).size()){
 
                 Home home = manager.getHome(uuid, homeName);
 
@@ -70,22 +70,6 @@ public class SetHomeCMD implements CommandExecutor {
 
         }
         return false;
-    }
-
-    public int getMaxHomes(Player player, int defaultValue) {
-        String permissionPrefix = "bungeehomes.amount.";
-        int maxHomes = defaultValue;
-
-        for (PermissionAttachmentInfo attachmentInfo : player.getEffectivePermissions()) {
-            String permission = attachmentInfo.getPermission();
-            if (permission.startsWith(permissionPrefix)) {
-                int permMaxhomes = Integer.parseInt(permission.substring(permission.lastIndexOf(".") + 1));
-                if(permMaxhomes > maxHomes){
-                    maxHomes = permMaxhomes;
-                }
-            }
-        }
-        return maxHomes;
     }
 
 
