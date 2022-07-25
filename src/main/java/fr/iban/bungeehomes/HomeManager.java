@@ -54,9 +54,7 @@ public class HomeManager {
             if(getHome(uuid, name) != null){
                 try {
                     delHome(uuid, name).get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
+                } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
             }

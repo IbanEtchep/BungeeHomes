@@ -1,6 +1,7 @@
 package fr.iban.bungeehomes.command;
 
 import fr.iban.bukkitcore.menu.ConfirmMenu;
+import fr.iban.bukkitcore.utils.SLocationUtils;
 import fr.iban.bungeehomes.BungeeHomesPlugin;
 import fr.iban.bungeehomes.Home;
 import fr.iban.bungeehomes.HomeManager;
@@ -52,16 +53,24 @@ public class SetHomeCMD implements CommandExecutor {
                     String finalHomeName = homeName;
                     new ConfirmMenu(player, "§c§lÉcraser une résidence?", "Cette résidence existe déjà, voulez-vous l'écraser?", confirmed -> {
                         if(confirmed){
-                            player.sendMessage("§aLa résidence a bien été créée à l'endroit où vous vous trouvez.");
-                            manager.setHome(finalUuid, player.getLocation(), finalHomeName);
+                            if(SLocationUtils.isSafeLocation(player.getLocation())) {
+                                player.sendMessage("§aLa résidence a bien été créée à l'endroit où vous vous trouvez.");
+                                manager.setHome(finalUuid, player.getLocation(), finalHomeName);
+                            }else{
+                                player.sendMessage("§cVous ne pouvez pas créer une résidence ici.");
+                            }
                         }else{
                             player.sendMessage("§cAction annulée.");
                         }
                         player.closeInventory();
                     }).open();
                 }else{
-                    player.sendMessage("§aLa résidence a bien été créée à l'endroit où vous vous trouvez.");
-                    manager.setHome(uuid, player.getLocation(), homeName);
+                    if(SLocationUtils.isSafeLocation(player.getLocation())) {
+                        player.sendMessage("§aLa résidence a bien été créée à l'endroit où vous vous trouvez.");
+                        manager.setHome(uuid, player.getLocation(), homeName);
+                    }else{
+                        player.sendMessage("§cVous ne pouvez pas créer une résidence ici.");
+                    }
                 }
 
             }else{
