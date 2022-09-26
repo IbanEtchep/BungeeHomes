@@ -19,8 +19,8 @@ import java.util.UUID;
 
 public class HomeCMD implements CommandExecutor, TabCompleter {
 
-    private BungeeHomesPlugin plugin;
-    private HomeManager manager;
+    private final BungeeHomesPlugin plugin;
+    private final HomeManager manager;
 
     public HomeCMD(BungeeHomesPlugin plugin) {
         this.plugin = plugin;
