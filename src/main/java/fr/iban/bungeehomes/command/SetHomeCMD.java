@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class SetHomeCMD implements CommandExecutor {
 
-    private HomeManager manager;
+    private final HomeManager manager;
 
     public SetHomeCMD(BungeeHomesPlugin plugin) {
         this.manager = plugin.getHomeManager();
@@ -26,54 +26,52 @@ public class SetHomeCMD implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if(sender instanceof Player){
-            Player player = (Player)sender;
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
             UUID uuid = player.getUniqueId();
             String homeName = "home";
 
-            if(args.length == 1){
+            if (args.length == 1) {
 
                 String arg = args[0];
 
-                if(player.hasPermission("bungeehomes.sethome.others") && arg.contains(":")){
+                if (player.hasPermission("bungeehomes.sethome.others") && arg.contains(":")) {
                     String[] split = arg.split(":");
                     uuid = Bukkit.getOfflinePlayer(split[0]).getUniqueId();
                     homeName = split[1];
-                }else{
+                } else {
                     homeName = arg;
                 }
             }
 
-            if(player.hasPermission("bungeehomes.amount.unlimited") ||  manager.getMaxHomes(player, 1) > manager.getHomes().get(uuid).size()){
+            Home home = manager.getHome(uuid, homeName);
 
-                Home home = manager.getHome(uuid, homeName);
-
-                if(home != null){
-                    UUID finalUuid = uuid;
-                    String finalHomeName = homeName;
-                    new ConfirmMenu(player, "§c§lÉcraser une résidence?", "Cette résidence existe déjà, voulez-vous l'écraser?", confirmed -> {
-                        if(confirmed){
-                            if(SLocationUtils.isSafeLocation(player.getLocation())) {
-                                player.sendMessage("§aLa résidence a bien été créée à l'endroit où vous vous trouvez.");
-                                manager.setHome(finalUuid, player.getLocation(), finalHomeName);
-                            }else{
-                                player.sendMessage("§cVous ne pouvez pas créer une résidence ici.");
-                            }
-                        }else{
-                            player.sendMessage("§cAction annulée.");
+            if (home != null) {
+                UUID finalUuid = uuid;
+                String finalHomeName = homeName;
+                new ConfirmMenu(player, "§c§lÉcraser une résidence?", "Cette résidence existe déjà, voulez-vous l'écraser?", confirmed -> {
+                    if (confirmed) {
+                        if (SLocationUtils.isSafeLocation(player.getLocation())) {
+                            player.sendMessage("§aLa résidence a bien été créée à l'endroit où vous vous trouvez.");
+                            manager.setHome(finalUuid, player.getLocation(), finalHomeName);
+                        } else {
+                            player.sendMessage("§cVous ne pouvez pas créer une résidence ici.");
                         }
-                        player.closeInventory();
-                    }).open();
-                }else{
-                    if(SLocationUtils.isSafeLocation(player.getLocation())) {
-                        player.sendMessage("§aLa résidence a bien été créée à l'endroit où vous vous trouvez.");
-                        manager.setHome(uuid, player.getLocation(), homeName);
-                    }else{
-                        player.sendMessage("§cVous ne pouvez pas créer une résidence ici.");
+                    } else {
+                        player.sendMessage("§cAction annulée.");
                     }
-                }
+                    player.closeInventory();
+                }).open();
+            } else if (player.hasPermission("bungeehomes.amount.unlimited")
+                    || manager.getMaxHomes(player, 1) > manager.getHomes().get(uuid).size()) {
 
-            }else{
+                if (SLocationUtils.isSafeLocation(player.getLocation())) {
+                    player.sendMessage("§aLa résidence a bien été créée à l'endroit où vous vous trouvez.");
+                    manager.setHome(uuid, player.getLocation(), homeName);
+                } else {
+                    player.sendMessage("§cVous ne pouvez pas créer une résidence ici.");
+                }
+            } else {
                 player.sendMessage("§cVous avez atteint la limite de résidences que vous pouvez posséder.");
             }
 

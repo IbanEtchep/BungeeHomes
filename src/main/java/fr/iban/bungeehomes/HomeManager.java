@@ -26,7 +26,7 @@ public class HomeManager {
     private DataSource ds = DbAccess.getDataSource();
 
     private LoadingCache<UUID, List<Home>> homes = Caffeine.newBuilder()
-            .build(uuid -> storage.getHomes((UUID) uuid));
+            .build(uuid -> storage.getHomes(uuid));
 
     public HomeManager(BungeeHomesPlugin plugin) {
         this.plugin = plugin;
