@@ -18,6 +18,7 @@ public final class BungeeHomesPlugin extends JavaPlugin {
         getCommand("bdelhome").setExecutor(new DelHomeCMD(this));
         getCommand("bdelhome").setTabCompleter(new DelHomeCMD(this));
         getCommand("addmaxhomes").setExecutor(new AddMaxHomesCMD());
+        getCommand("addmaxbonushomes").setExecutor(new AddMaxBonusHomesCMD());
         getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
     }
 

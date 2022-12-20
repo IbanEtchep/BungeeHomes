@@ -75,7 +75,27 @@ public class HomeManager {
     }
 
     public int getMaxHomes(Player player, int defaultValue) {
+        return getMaxBonusHomes(player, 0) + getMaxRegularHomes(player, defaultValue);
+    }
+
+    public int getMaxRegularHomes(Player player, int defaultValue) {
         String permissionPrefix = "bungeehomes.amount.";
+        int maxHomes = defaultValue;
+
+        for (PermissionAttachmentInfo attachmentInfo : player.getEffectivePermissions()) {
+            String permission = attachmentInfo.getPermission();
+            if (permission.startsWith(permissionPrefix)) {
+                int permMaxhomes = Integer.parseInt(permission.substring(permission.lastIndexOf(".") + 1));
+                if(permMaxhomes > maxHomes){
+                    maxHomes = permMaxhomes;
+                }
+            }
+        }
+        return maxHomes;
+    }
+
+    public int getMaxBonusHomes(Player player, int defaultValue) {
+        String permissionPrefix = "bungeehomes.bonusamount.";
         int maxHomes = defaultValue;
 
         for (PermissionAttachmentInfo attachmentInfo : player.getEffectivePermissions()) {
@@ -95,10 +115,7 @@ public class HomeManager {
             try {
                 runnable.run();
             } catch (Exception e) {
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
-                }
-                throw new CompletionException(e);
+                throw (RuntimeException) e;
             }
         });
     }

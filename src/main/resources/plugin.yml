@@ -21,6 +21,7 @@ commands:
     aliases:
       - homes
   addmaxhomes:
+  addmaxbonushomes:
   bsethome:
     permission: bungeehomes.sethome
     aliases:

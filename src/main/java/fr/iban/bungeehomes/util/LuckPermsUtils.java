@@ -40,6 +40,23 @@ public class LuckPermsUtils {
 		});
 	}
 
+	public static void addBonusHomes(Player player, int amount) {
+		String perm = "bungeehomes.bonusamount.";
+		CompletableFuture<User> userFuture = luckapi.getUserManager().loadUser(player.getUniqueId());
+		userFuture.thenAcceptAsync(user -> {
+			int homes = 0;
+			for (PermissionNode permNode : user.getNodes(NodeType.PERMISSION)) {
+				if(permNode.getKey().startsWith(perm)) {
+					homes = Integer.parseInt(StringUtils.removeStart(permNode.getKey(), perm));
+					user.data().remove(permNode);
+				}
+			}
+			Bukkit.getLogger().log(Level.INFO, "Résidences bonus de " + player.getName() + " " + homes + " -> "+(homes+amount));
+			user.data().add(Node.builder(perm+(homes+amount)).build());
+			luckapi.getUserManager().saveUser(user);
+		});
+	}
+
 	public static User loadUser(Player player) {
 		if (!player.isOnline())
 			throw new IllegalStateException("Player is offline!"); 
