@@ -21,23 +21,24 @@ import java.util.stream.Collectors;
 public class HomeManager {
 
     private final BungeeHomesPlugin plugin;
-    private Storage storage = new Storage();
-
-    private DataSource ds = DbAccess.getDataSource();
-
-    private LoadingCache<UUID, List<Home>> homes = Caffeine.newBuilder()
-            .build(uuid -> storage.getHomes(uuid));
+    private final Storage storage = new Storage();
+    private final LoadingCache<UUID, List<Home>> homes = Caffeine.newBuilder()
+            .build(storage::getHomes);
 
     public HomeManager(BungeeHomesPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public LoadingCache<UUID, List<Home>> getHomes() {
+    public LoadingCache<UUID, List<Home>> getHomesCache() {
         return homes;
     }
 
+    public List<Home> getHomes(UUID uuid) {
+        return homes.get(uuid);
+    }
+
     public Home getHome(UUID uuid, String name) {
-        for(Home home : homes.get(uuid)){
+        for(Home home : getHomes(uuid)){
             if(home.getName().equalsIgnoreCase(name)){
                 return home;
             }
@@ -46,7 +47,7 @@ public class HomeManager {
     }
 
     public List<String> getHomeNames(UUID uuid){
-        return getHomes().get(uuid).stream().map(home -> home.getName()).collect(Collectors.toList());
+        return getHomes(uuid).stream().map(Home::getName).collect(Collectors.toList());
     }
 
     public void setHome(UUID uuid, Location loc, String name) {
@@ -59,8 +60,11 @@ public class HomeManager {
                 }
             }
             Home home = new Home(name, SLocationUtils.getSLocation(loc));
-            getHomes().get(uuid).add(home);
+            getHomesCache().get(uuid).add(home);
             storage.addHome(uuid, home);
+        }).exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return null;
         });
     }
 
@@ -68,7 +72,7 @@ public class HomeManager {
         return future(() -> {
             Home home = getHome(uuid, name);
             if(home != null) {
-                getHomes().get(uuid).remove(home);
+                getHomesCache().get(uuid).remove(home);
                 storage.deleleHome(uuid, name);
             }
         });

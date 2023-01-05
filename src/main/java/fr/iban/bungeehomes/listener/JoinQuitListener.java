@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class JoinQuitListener implements Listener {
 
-    private BungeeHomesPlugin plugin;
+    private final BungeeHomesPlugin plugin;
 
     public JoinQuitListener(BungeeHomesPlugin plugin) {
         this.plugin = plugin;
@@ -21,7 +21,7 @@ public class JoinQuitListener implements Listener {
         Player player = e.getPlayer();
         //Mise en cache
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            plugin.getHomeManager().getHomes().get(player.getUniqueId());
+            plugin.getHomeManager().getHomesCache().get(player.getUniqueId());
         });
     }
 
@@ -29,6 +29,6 @@ public class JoinQuitListener implements Listener {
     public void onQuit(PlayerQuitEvent e){
         Player player = e.getPlayer();
         //Invalidation du cache du joueur.
-        plugin.getHomeManager().getHomes().invalidate(player.getUniqueId());
+        plugin.getHomeManager().getHomesCache().invalidate(player.getUniqueId());
     }
 }

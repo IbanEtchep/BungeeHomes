@@ -26,8 +26,7 @@ public class SetHomeCMD implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             UUID uuid = player.getUniqueId();
             String homeName = "home";
 
@@ -42,6 +41,11 @@ public class SetHomeCMD implements CommandExecutor {
                 } else {
                     homeName = arg;
                 }
+            }
+
+            if(homeName.equalsIgnoreCase("bed")) {
+                player.sendMessage("§cCe nom de résidence est réservé. Veuillez en choisir un autre.");
+                return false;
             }
 
             Home home = manager.getHome(uuid, homeName);
@@ -63,7 +67,7 @@ public class SetHomeCMD implements CommandExecutor {
                     player.closeInventory();
                 }).open();
             } else if (player.hasPermission("bungeehomes.amount.unlimited")
-                    || manager.getMaxHomes(player, 1) > manager.getHomes().get(uuid).size()) {
+                    || manager.getMaxHomes(player, 1) > manager.getHomes(uuid).size()) {
 
                 if (SLocationUtils.isSafeLocation(player.getLocation())) {
                     player.sendMessage("§aLa résidence a bien été créée à l'endroit où vous vous trouvez.");

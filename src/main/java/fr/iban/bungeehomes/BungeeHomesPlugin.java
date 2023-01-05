@@ -6,10 +6,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BungeeHomesPlugin extends JavaPlugin {
 
+    private static BungeeHomesPlugin instance;
     private HomeManager homeManager;
 
     @Override
     public void onEnable() {
+        instance = this;
         this.homeManager = new HomeManager(this);
         getCommand("bhomes").setExecutor(new HomesCMD(this));
         getCommand("bhome").setExecutor(new HomeCMD(this));
@@ -29,5 +31,9 @@ public final class BungeeHomesPlugin extends JavaPlugin {
 
     public HomeManager getHomeManager() {
         return homeManager;
+    }
+
+    public static BungeeHomesPlugin getInstance() {
+        return instance;
     }
 }

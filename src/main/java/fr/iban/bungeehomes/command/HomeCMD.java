@@ -29,8 +29,7 @@ public class HomeCMD implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(sender instanceof Player){
-            Player player = (Player)sender;
+        if(sender instanceof Player player){
             UUID uuid = player.getUniqueId();
             String homeName = "home";
 
@@ -63,8 +62,7 @@ public class HomeCMD implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> suggestions = new ArrayList<>();
-        if(sender instanceof Player){
-            Player player = (Player) sender;
+        if(sender instanceof Player player){
             if(args.length == 1) {
                 UUID uuid =  player.getUniqueId();
                 String prefix = "";
